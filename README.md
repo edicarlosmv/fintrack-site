@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://edicarlosmv.github.io/fintrack-site/icon.png" width="100" height="100" style="border-radius:22px" alt="FinTrack Logo"/>
+<img src="https://edicarlosmv.github.io/fintrack-site/fintrack-logo-512.png" width="100" height="100" style="border-radius:22px" alt="FinTrack Logo"/>
 
 # FinTrack
 
