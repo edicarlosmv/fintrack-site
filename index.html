@@ -1,418 +1,150 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Organize suas finanças com inteligência. Parcelas, previsão e score de saúde financeira. 7 dias grátis." />
+  <meta property="og:title" content="FinTrack — Controle Financeiro Inteligente" />
+  <meta property="og:description" content="Parcelas, previsão financeira e score de saúde. 7 dias grátis." />
+  <meta property="og:image" content="fintrack-screenshot-1-inicio.png" />
   <title>FinTrack — Controle Financeiro Inteligente</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --green:       #1D9E75;
-      --green-dark:  #0A6B4E;
-      --green-light: #E1F5EE;
-      --gold:        #C9901A;
-      --gold-light:  #FDF3E0;
-      --text:        #111827;
-      --text-2:      #4B5563;
-      --text-3:      #9CA3AF;
-      --border:      #E5E7EB;
-      --surface:     #F9FAFB;
-      --white:       #FFFFFF;
-      --radius:      14px;
+      --green: #1D9E75; --green-dark: #0A6B4E; --green-light: #E1F5EE;
+      --gold: #C9901A; --gold-light: #FDF3E0;
+      --text: #111827; --text-2: #4B5563; --text-3: #9CA3AF;
+      --border: #E5E7EB; --surface: #F9FAFB; --white: #FFFFFF;
+      --radius: 14px;
     }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      background: var(--white);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── NAV ───────────────────────────────────────── */
+    /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.94); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 0 24px;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 60px;
+      padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px;
     }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
-    }
-    .nav-logo-icon {
-      width: 34px; height: 34px;
-      background: var(--green);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .nav-logo-icon svg { width: 20px; height: 20px; }
-    .nav-logo-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 18px; font-weight: 700;
-      color: var(--text);
-    }
-    .nav-cta {
-      background: var(--green);
-      color: var(--white);
-      border: none; border-radius: 8px;
-      padding: 8px 18px;
-      font-size: 14px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      transition: background .2s;
-    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon { width: 34px; height: 34px; background: var(--green); border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+    .nav-logo-text { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .lang-toggle { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .lang-btn { padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-2); transition: all .2s; }
+    .lang-btn.active { background: var(--green); color: var(--white); }
+    .nav-cta { background: var(--green); color: var(--white); border: none; border-radius: 8px; padding: 8px 18px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; transition: background .2s; }
     .nav-cta:hover { background: var(--green-dark); }
 
-    /* ── HERO ──────────────────────────────────────── */
-    .hero {
-      padding: 80px 24px 64px;
-      text-align: center;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--green-light);
-      color: var(--green-dark);
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 13px; font-weight: 600;
-      margin-bottom: 28px;
-    }
-    .hero-badge span { font-size: 15px; }
-    .hero h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(36px, 6vw, 58px);
-      font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      color: var(--text);
-      margin-bottom: 20px;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--green);
-    }
-    .hero p {
-      font-size: 18px;
-      color: var(--text-2);
-      max-width: 520px;
-      margin: 0 auto 36px;
-      line-height: 1.7;
-    }
-    .hero-actions {
-      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--green);
-      color: var(--white);
-      border: none; border-radius: 10px;
-      padding: 14px 26px;
-      font-size: 15px; font-weight: 700;
-      cursor: pointer; text-decoration: none;
-      transition: background .2s, transform .15s;
-    }
+    /* HERO */
+    .hero { padding: 80px 24px 64px; text-align: center; max-width: 760px; margin: 0 auto; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-light); color: var(--green-dark); border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 600; margin-bottom: 28px; }
+    .hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 6vw, 58px); font-weight: 700; line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 20px; }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero p { font-size: 18px; color: var(--text-2); max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: var(--white); border: none; border-radius: 10px; padding: 14px 26px; font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; transition: background .2s, transform .15s; }
     .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
-    .btn-outline {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: transparent;
-      color: var(--text);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 26px;
-      font-size: 15px; font-weight: 600;
-      cursor: pointer; text-decoration: none;
-      transition: border-color .2s;
-    }
+    .btn-outline { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 26px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; transition: border-color .2s; }
     .btn-outline:hover { border-color: var(--green); color: var(--green); }
-    .hero-note {
-      font-size: 13px;
-      color: var(--text-3);
-    }
+    .hero-note { font-size: 13px; color: var(--text-3); }
     .hero-note strong { color: var(--text-2); }
 
-    /* ── STATS BAR ─────────────────────────────────── */
-    .stats-bar {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 24px;
-      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
-    }
+    /* SCREENSHOTS */
+    .screenshots-section { padding: 60px 24px; background: linear-gradient(180deg, #f0fdf8 0%, var(--white) 100%); overflow: hidden; }
+    .screenshots-title { text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 3vw, 32px); font-weight: 700; margin-bottom: 40px; color: var(--text); }
+    .screenshots-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 12px 24px 24px; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: center; flex-wrap: nowrap; }
+    .screenshots-scroll::-webkit-scrollbar { display: none; }
+    .screenshot-item { flex-shrink: 0; scroll-snap-align: center; text-align: center; }
+    .screenshot-item img { width: 200px; border-radius: 20px; box-shadow: 0 16px 48px rgba(0,0,0,0.18); display: block; transition: transform .3s; }
+    .screenshot-item img:hover { transform: translateY(-6px) scale(1.02); }
+    .screenshot-label { font-size: 12px; color: var(--text-2); margin-top: 10px; font-weight: 500; }
+
+    /* STATS */
+    .stats-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 24px; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
     .stat { text-align: center; }
-    .stat-value {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px; font-weight: 700;
-      color: var(--green);
-    }
+    .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--green); }
     .stat-label { font-size: 13px; color: var(--text-2); margin-top: 2px; }
 
-    /* ── FEATURES ──────────────────────────────────── */
-    .section {
-      padding: 72px 24px;
-      max-width: 1080px;
-      margin: 0 auto;
-    }
-    .section-eyebrow {
-      font-size: 13px; font-weight: 700;
-      color: var(--green);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-    }
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 700;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      font-size: 17px;
-      color: var(--text-2);
-      max-width: 560px;
-      line-height: 1.7;
-      margin-bottom: 52px;
-    }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      transition: border-color .2s, box-shadow .2s;
-    }
-    .feature-card:hover {
-      border-color: var(--green);
-      box-shadow: 0 4px 20px rgba(29,158,117,0.08);
-    }
-    .feature-icon {
-      width: 44px; height: 44px;
-      background: var(--green-light);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      margin-bottom: 16px;
-    }
-    .feature-badge {
-      display: inline-block;
-      background: var(--gold-light);
-      color: var(--gold);
-      border-radius: 4px;
-      font-size: 10px; font-weight: 700;
-      padding: 2px 7px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .feature-card h3 {
-      font-size: 16px; font-weight: 700;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-    .feature-card p {
-      font-size: 14px;
-      color: var(--text-2);
-      line-height: 1.65;
-    }
+    /* FEATURES */
+    .section { padding: 72px 24px; max-width: 1080px; margin: 0 auto; }
+    .section-eyebrow { font-size: 13px; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+    .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; letter-spacing: -0.8px; margin-bottom: 16px; }
+    .section-sub { font-size: 17px; color: var(--text-2); max-width: 560px; line-height: 1.7; margin-bottom: 52px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; transition: border-color .2s, box-shadow .2s; }
+    .feature-card:hover { border-color: var(--green); box-shadow: 0 4px 20px rgba(29,158,117,0.08); }
+    .feature-icon { width: 44px; height: 44px; background: var(--green-light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
+    .feature-badge { display: inline-block; background: var(--gold-light); color: var(--gold); border-radius: 4px; font-size: 10px; font-weight: 700; padding: 2px 7px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--text-2); line-height: 1.65; }
 
-    /* ── PLANS ─────────────────────────────────────── */
-    .plans-section {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 72px 24px;
-    }
+    /* PLANS */
+    .plans-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 72px 24px; }
     .plans-inner { max-width: 960px; margin: 0 auto; }
-    .plans-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 48px;
-    }
-    .plan-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      position: relative;
-      transition: box-shadow .2s;
-    }
+    .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 48px; }
+    .plan-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius); padding: 28px; position: relative; transition: box-shadow .2s; }
     .plan-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-    .plan-card.featured {
-      border-color: var(--green);
-      box-shadow: 0 0 0 1px var(--green);
-    }
-    .plan-badge {
-      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: var(--green);
-      color: var(--white);
-      border-radius: 20px;
-      padding: 3px 14px;
-      font-size: 11px; font-weight: 700;
-      white-space: nowrap;
-      letter-spacing: 0.5px;
-    }
-    .plan-name {
-      font-size: 14px; font-weight: 600;
-      color: var(--text-2);
-      margin-bottom: 8px;
-    }
-    .plan-price {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 36px; font-weight: 700;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
+    .plan-card.featured { border-color: var(--green); box-shadow: 0 0 0 1px var(--green); }
+    .plan-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--white); border-radius: 20px; padding: 3px 14px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .plan-name { font-size: 14px; font-weight: 600; color: var(--text-2); margin-bottom: 8px; }
+    .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
     .plan-price sup { font-size: 18px; vertical-align: super; }
     .plan-period { font-size: 13px; color: var(--text-3); margin-bottom: 6px; }
     .plan-annual { font-size: 13px; color: var(--green); font-weight: 600; margin-bottom: 20px; }
     .plan-divider { height: 1px; background: var(--border); margin: 16px 0; }
     .plan-features { list-style: none; margin-bottom: 24px; }
-    .plan-features li {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 14px; color: var(--text-2);
-      margin-bottom: 10px;
-    }
+    .plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-2); margin-bottom: 10px; }
     .plan-features li .check { color: var(--green); flex-shrink: 0; }
     .plan-features li .lock { color: var(--text-3); flex-shrink: 0; }
     .plan-features li.disabled { opacity: 0.5; }
-    .btn-plan {
-      display: block; width: 100%;
-      padding: 12px;
-      border-radius: 9px;
-      font-size: 15px; font-weight: 700;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all .2s;
-    }
-    .btn-plan-primary {
-      background: var(--green); color: var(--white); border: none;
-    }
+    .btn-plan { display: block; width: 100%; padding: 12px; border-radius: 9px; font-size: 15px; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; transition: all .2s; }
+    .btn-plan-primary { background: var(--green); color: var(--white); border: none; }
     .btn-plan-primary:hover { background: var(--green-dark); }
-    .btn-plan-secondary {
-      background: transparent; color: var(--text);
-      border: 1.5px solid var(--border);
-    }
+    .btn-plan-secondary { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
     .btn-plan-secondary:hover { border-color: var(--green); color: var(--green); }
 
-    /* ── TRIAL BANNER ──────────────────────────────── */
-    .trial-banner {
-      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
-      padding: 56px 24px;
-      text-align: center;
-    }
-    .trial-banner h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(26px, 4vw, 38px);
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 12px;
-    }
-    .trial-banner p {
-      font-size: 17px;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 32px;
-    }
-    .btn-trial {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--white);
-      color: var(--green-dark);
-      border: none; border-radius: 10px;
-      padding: 14px 28px;
-      font-size: 16px; font-weight: 800;
-      text-decoration: none;
-      transition: transform .15s, box-shadow .15s;
-    }
+    /* TRIAL BANNER */
+    .trial-banner { background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%); padding: 72px 24px; text-align: center; }
+    .trial-banner h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 4vw, 42px); font-weight: 700; color: var(--white); margin-bottom: 12px; }
+    .trial-banner p { font-size: 17px; color: rgba(255,255,255,0.85); margin-bottom: 32px; }
+    .btn-trial { display: inline-flex; align-items: center; gap: 10px; background: var(--white); color: var(--green-dark); border: none; border-radius: 12px; padding: 16px 32px; font-size: 17px; font-weight: 800; text-decoration: none; transition: transform .15s, box-shadow .15s; }
     .btn-trial:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-    .trial-note { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 14px; }
+    .trial-note { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 16px; }
 
-    /* ── PRIVACY ───────────────────────────────────── */
-    .privacy-section {
-      padding: 72px 24px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .privacy-section h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 28px; font-weight: 700;
-      margin-bottom: 8px;
-    }
+    /* PRIVACY */
+    .privacy-section { padding: 72px 24px; max-width: 720px; margin: 0 auto; }
+    .privacy-section h2 { font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
     .privacy-date { font-size: 13px; color: var(--text-3); margin-bottom: 32px; }
-    .privacy-section h3 {
-      font-size: 16px; font-weight: 700;
-      color: var(--text);
-      margin: 28px 0 10px;
-    }
-    .privacy-section p, .privacy-section li {
-      font-size: 15px; color: var(--text-2); line-height: 1.75;
-    }
+    .privacy-section h3 { font-size: 16px; font-weight: 700; margin: 28px 0 10px; }
+    .privacy-section p, .privacy-section li { font-size: 15px; color: var(--text-2); line-height: 1.75; }
     .privacy-section ul { padding-left: 20px; margin-top: 8px; }
     .privacy-section ul li { margin-bottom: 4px; }
-    .highlight-box {
-      background: var(--green-light);
-      border-left: 4px solid var(--green);
-      border-radius: 0 8px 8px 0;
-      padding: 14px 18px;
-      margin: 16px 0;
-      font-size: 14px;
-      color: var(--green-dark);
-      font-weight: 500;
-    }
+    .highlight-box { background: var(--green-light); border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; font-size: 14px; color: var(--green-dark); font-weight: 500; }
 
-    /* ── FOOTER ────────────────────────────────────── */
-    footer {
-      background: var(--text);
-      color: rgba(255,255,255,0.5);
-      padding: 32px 24px;
-      text-align: center;
-      font-size: 13px;
-    }
+    /* FOOTER */
+    footer { background: var(--text); color: rgba(255,255,255,0.5); padding: 40px 24px; text-align: center; font-size: 13px; }
     footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
     footer a:hover { color: var(--white); }
-    .footer-logo {
-      display: flex; align-items: center; gap: 8px;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .footer-logo-icon {
-      width: 28px; height: 28px;
-      background: var(--green);
-      border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .footer-logo-text {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 16px; font-weight: 700;
-      color: var(--white);
-    }
-    .footer-links { margin-bottom: 16px; }
-    .footer-links a { margin: 0 12px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; justify-content: center; margin-bottom: 16px; }
+    .footer-logo-icon { width: 28px; height: 28px; background: var(--green); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+    .footer-logo-text { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); }
+    .footer-links { margin-bottom: 16px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 24px; }
 
-    /* ── RESPONSIVE ────────────────────────────────── */
+    /* HIDDEN/SHOWN by language */
+    [data-lang="en"] { display: none; }
+    html[lang="en"] [data-lang="en"] { display: revert; }
+    html[lang="en"] [data-lang="pt"] { display: none; }
+
     @media (max-width: 600px) {
       .stats-bar { gap: 28px; }
       .hero-actions { flex-direction: column; align-items: center; }
       .btn-primary, .btn-outline { width: 100%; max-width: 320px; justify-content: center; }
+      .screenshot-item img { width: 160px; }
     }
   </style>
 </head>
@@ -422,24 +154,31 @@
 <nav>
   <a href="#" class="nav-logo">
     <div class="nav-logo-icon">
-      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polyline points="2,16 6,10 10,12 14,6 20,4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+        <polyline points="2,16 6,10 10,12 14,6 20,4" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         <circle cx="20" cy="4" r="1.8" fill="white"/>
       </svg>
     </div>
     <span class="nav-logo-text">FinTrack</span>
   </a>
-  <a href="#download" class="nav-cta">Baixar grátis</a>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-pt" onclick="setLang('pt')">PT</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="nav-cta" data-lang="pt">Baixar grátis</a>
+    <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="nav-cta" data-lang="en">Download free</a>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge"><span>🎉</span> 7 dias grátis sem cartão</div>
+<!-- HERO PT -->
+<section class="hero" data-lang="pt">
+  <div class="hero-badge">🎉 7 dias grátis sem cartão</div>
   <h1>Seu dinheiro,<br/><em>sob controle.</em></h1>
   <p>Parcelas, previsão financeira e score de saúde do seu dinheiro — tudo em um app bilíngue e inteligente.</p>
   <div class="hero-actions">
-    <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-primary" id="download">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.85a2.03 2.03 0 0 1-.99-.86L13.5 12 2.19 1.01A2.03 2.03 0 0 1 3.18.15L16.34 7.5l-3.46 4.5 3.46 4.5L3.18 23.85z"/><path d="M16.9 14.5l2.54 1.46c.9.52.9 1.56 0 2.08l-3.1 1.79L13.5 16.5l3.4-2zM16.9 9.5L13.5 7.5l2.84-3.33 3.1 1.79c.9.52.9 1.56 0 2.08L16.9 9.5z"/></svg>
+    <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.83 1-.98 1.4-.42l13.5 8.5c.36.23.36.77 0 1L4.4 20.92C4 21.48 3 21.33 3 20.5z"/></svg>
       Baixar na Play Store
     </a>
     <a href="#plans" class="btn-outline">Ver planos</a>
@@ -447,212 +186,296 @@
   <p class="hero-note"><strong>Grátis para baixar</strong> · PRO a partir de R$ 12,90/mês · Cancele quando quiser</p>
 </section>
 
+<!-- HERO EN -->
+<section class="hero" data-lang="en">
+  <div class="hero-badge">🎉 7-day free trial, no credit card</div>
+  <h1>Your money,<br/><em>under control.</em></h1>
+  <p>Installments, financial forecast and a money health score — all in one bilingual and smart app.</p>
+  <div class="hero-actions">
+    <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.83 1-.98 1.4-.42l13.5 8.5c.36.23.36.77 0 1L4.4 20.92C4 21.48 3 21.33 3 20.5z"/></svg>
+      Download on Google Play
+    </a>
+    <a href="#plans" class="btn-outline">See plans</a>
+  </div>
+  <p class="hero-note"><strong>Free to download</strong> · PRO from $4.99/mo · Cancel anytime</p>
+</section>
+
+<!-- SCREENSHOTS -->
+<section class="screenshots-section">
+  <h2 class="screenshots-title" data-lang="pt">Veja o app em ação</h2>
+  <h2 class="screenshots-title" data-lang="en">See the app in action</h2>
+  <div class="screenshots-scroll">
+    <div class="screenshot-item">
+      <img src="fintrack-screenshot-1-inicio.png" alt="Tela Início" loading="lazy" />
+      <div class="screenshot-label" data-lang="pt">Início</div>
+      <div class="screenshot-label" data-lang="en">Home</div>
+    </div>
+    <div class="screenshot-item">
+      <img src="fintrack-screenshot-2-lancamentos.png" alt="Tela Lançamentos" loading="lazy" />
+      <div class="screenshot-label" data-lang="pt">Lançamentos</div>
+      <div class="screenshot-label" data-lang="en">Entries</div>
+    </div>
+    <div class="screenshot-item">
+      <img src="fintrack-screenshot-3-desempenho.png" alt="Tela Desempenho" loading="lazy" />
+      <div class="screenshot-label" data-lang="pt">Desempenho</div>
+      <div class="screenshot-label" data-lang="en">Performance</div>
+    </div>
+    <div class="screenshot-item">
+      <img src="fintrack-screenshot-4-lembretes.png" alt="Tela Lembretes" loading="lazy" />
+      <div class="screenshot-label" data-lang="pt">Lembretes</div>
+      <div class="screenshot-label" data-lang="en">Reminders</div>
+    </div>
+    <div class="screenshot-item">
+      <img src="fintrack-screenshot-5-saude.png" alt="Tela Saúde" loading="lazy" />
+      <div class="screenshot-label" data-lang="pt">Saúde Financeira</div>
+      <div class="screenshot-label" data-lang="en">Financial Health</div>
+    </div>
+  </div>
+</section>
+
 <!-- STATS -->
 <div class="stats-bar">
-  <div class="stat">
-    <div class="stat-value">8</div>
-    <div class="stat-label">Telas de controle</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value">PT/EN</div>
-    <div class="stat-label">Bilíngue</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value">7 dias</div>
-    <div class="stat-label">Trial gratuito</div>
-  </div>
-  <div class="stat">
-    <div class="stat-value">0</div>
-    <div class="stat-label">Dados na nuvem</div>
-  </div>
+  <div class="stat"><div class="stat-value">8</div><div class="stat-label" data-lang="pt">Telas de controle</div><div class="stat-label" data-lang="en">Control screens</div></div>
+  <div class="stat"><div class="stat-value">PT/EN</div><div class="stat-label" data-lang="pt">Bilíngue</div><div class="stat-label" data-lang="en">Bilingual</div></div>
+  <div class="stat"><div class="stat-value">7 <span data-lang="pt">dias</span><span data-lang="en">days</span></div><div class="stat-label" data-lang="pt">Trial gratuito</div><div class="stat-label" data-lang="en">Free trial</div></div>
+  <div class="stat"><div class="stat-value">0</div><div class="stat-label" data-lang="pt">Dados na nuvem</div><div class="stat-label" data-lang="en">Cloud data</div></div>
 </div>
 
 <!-- FEATURES -->
 <section class="section" id="features">
-  <div class="section-eyebrow">Recursos</div>
-  <h2 class="section-title">Tudo que você precisa para<br/>organizar seu dinheiro</h2>
-  <p class="section-sub">O FinTrack vai além do básico — mostra o futuro do seu bolso antes que ele chegue.</p>
-
+  <div class="section-eyebrow" data-lang="pt">Recursos</div>
+  <div class="section-eyebrow" data-lang="en">Features</div>
+  <h2 class="section-title" data-lang="pt">Tudo que você precisa para<br/>organizar seu dinheiro</h2>
+  <h2 class="section-title" data-lang="en">Everything you need to<br/>organize your finances</h2>
+  <p class="section-sub" data-lang="pt">O FinTrack vai além do básico — mostra o futuro do seu bolso antes que ele chegue.</p>
+  <p class="section-sub" data-lang="en">FinTrack goes beyond the basics — shows the future of your wallet before it arrives.</p>
   <div class="features-grid">
-
     <div class="feature-card">
       <div class="feature-icon">📊</div>
-      <div class="feature-badge">PRO · Exclusivo</div>
-      <h3>Previsão financeira 3 meses</h3>
-      <p>Veja quanto da sua renda futura já está comprometida com parcelas antes de gastar.</p>
+      <div class="feature-badge">PRO</div>
+      <h3 data-lang="pt">Previsão financeira 3 meses</h3>
+      <h3 data-lang="en">3-month financial forecast</h3>
+      <p data-lang="pt">Veja quanto da sua renda futura já está comprometida com parcelas antes de gastar.</p>
+      <p data-lang="en">See how much of your future income is already committed to installments before spending.</p>
     </div>
-
     <div class="feature-card">
       <div class="feature-icon">💳</div>
-      <h3>Controle de parcelas</h3>
-      <p>Registre compras parceladas, acompanhe cada parcela e receba lembretes de vencimento automáticos.</p>
+      <h3 data-lang="pt">Controle de parcelas</h3>
+      <h3 data-lang="en">Installment tracking</h3>
+      <p data-lang="pt">Registre compras parceladas, acompanhe cada parcela e receba lembretes automáticos.</p>
+      <p data-lang="en">Record installment purchases, track each payment and get automatic reminders.</p>
     </div>
-
     <div class="feature-card">
       <div class="feature-icon">❤️</div>
-      <div class="feature-badge">PRO · Exclusivo</div>
-      <h3>Score de saúde financeira</h3>
-      <p>Score de 0 a 100 calculado com base no seu comportamento real dos últimos 6 meses.</p>
+      <div class="feature-badge">PRO</div>
+      <h3 data-lang="pt">Score de saúde financeira</h3>
+      <h3 data-lang="en">Financial health score</h3>
+      <p data-lang="pt">Score de 0 a 100 calculado com base no seu comportamento real dos últimos 6 meses.</p>
+      <p data-lang="en">Score from 0 to 100 calculated based on your real behavior over the last 6 months.</p>
     </div>
-
     <div class="feature-card">
       <div class="feature-icon">📈</div>
       <div class="feature-badge">PRO</div>
-      <h3>Gráficos de desempenho</h3>
-      <p>Evolução mensal de receitas e despesas, ranking por categoria e média histórica.</p>
+      <h3 data-lang="pt">Gráficos de desempenho</h3>
+      <h3 data-lang="en">Performance charts</h3>
+      <p data-lang="pt">Evolução mensal de receitas e despesas, ranking por categoria e média histórica.</p>
+      <p data-lang="en">Monthly evolution of income and expenses, category ranking and historical average.</p>
     </div>
-
     <div class="feature-card">
       <div class="feature-icon">🎯</div>
       <div class="feature-badge">PRO</div>
-      <h3>Metas e regra 50/30/20</h3>
-      <p>Defina metas financeiras com prazo e acompanhe o progresso. Regra 50/30/20 automática.</p>
+      <h3 data-lang="pt">Metas e regra 50/30/20</h3>
+      <h3 data-lang="en">Goals and 50/30/20 rule</h3>
+      <p data-lang="pt">Defina metas financeiras com prazo e acompanhe o progresso. Regra 50/30/20 automática.</p>
+      <p data-lang="en">Set financial goals with deadlines and track your progress. Automatic 50/30/20 rule.</p>
     </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🌐</div>
-      <h3>Bilíngue PT e EN</h3>
-      <p>Disponível em português e inglês. Troca de idioma com um toque, sem reiniciar o app.</p>
-    </div>
-
     <div class="feature-card">
       <div class="feature-icon">🔔</div>
-      <h3>Alertas de vencimento</h3>
-      <p>Receba alertas de parcelas a vencer nos próximos 7 dias e de parcelas em atraso.</p>
+      <h3 data-lang="pt">Alertas de vencimento</h3>
+      <h3 data-lang="en">Due date alerts</h3>
+      <p data-lang="pt">Receba alertas de parcelas a vencer nos próximos 7 dias e de parcelas em atraso.</p>
+      <p data-lang="en">Get alerts for installments due in the next 7 days and overdue payments.</p>
     </div>
-
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <h3 data-lang="pt">Bilíngue PT e EN</h3>
+      <h3 data-lang="en">Bilingual PT and EN</h3>
+      <p data-lang="pt">Disponível em português e inglês. Troca de idioma com um toque, sem reiniciar.</p>
+      <p data-lang="en">Available in Portuguese and English. Switch language with a tap, no restart needed.</p>
+    </div>
     <div class="feature-card">
       <div class="feature-icon">📱</div>
-      <h3>Dados 100% no dispositivo</h3>
-      <p>Nenhum dado enviado para servidores externos. Tudo fica guardado no seu celular.</p>
+      <h3 data-lang="pt">Dados 100% no dispositivo</h3>
+      <h3 data-lang="en">100% on-device data</h3>
+      <p data-lang="pt">Nenhum dado enviado para servidores externos. Tudo fica guardado no seu celular.</p>
+      <p data-lang="en">No data sent to external servers. Everything stays saved on your phone.</p>
     </div>
-
   </div>
 </section>
 
 <!-- PLANS -->
 <section class="plans-section" id="plans">
   <div class="plans-inner">
-    <div class="section-eyebrow">Planos</div>
-    <h2 class="section-title">Comece grátis por 7 dias</h2>
-    <p class="section-sub">Experimente todos os recursos PRO sem cartão de crédito. Cancele quando quiser.</p>
-
+    <div class="section-eyebrow" data-lang="pt">Planos</div>
+    <div class="section-eyebrow" data-lang="en">Plans</div>
+    <h2 class="section-title" data-lang="pt">Comece grátis por 7 dias</h2>
+    <h2 class="section-title" data-lang="en">Start free for 7 days</h2>
+    <p class="section-sub" data-lang="pt">Experimente todos os recursos PRO sem cartão. Cancele quando quiser.</p>
+    <p class="section-sub" data-lang="en">Try all PRO features without a credit card. Cancel anytime.</p>
     <div class="plans-grid">
 
       <!-- FREE -->
       <div class="plan-card">
-        <div class="plan-name">Gratuito</div>
+        <div class="plan-name" data-lang="pt">Gratuito</div>
+        <div class="plan-name" data-lang="en">Free</div>
         <div class="plan-price">R$ 0</div>
-        <div class="plan-period">Para sempre</div>
+        <div class="plan-period" data-lang="pt">Para sempre</div>
+        <div class="plan-period" data-lang="en">Forever</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Lançamentos ilimitados</li>
-          <li><span class="check">✓</span> Receitas e despesas</li>
-          <li><span class="check">✓</span> Parcelamentos com lembretes</li>
-          <li><span class="check">✓</span> Tema claro e escuro</li>
-          <li><span class="check">✓</span> Bilíngue PT/EN</li>
-          <li class="disabled"><span class="lock">✕</span> Gráficos de desempenho</li>
-          <li class="disabled"><span class="lock">✕</span> Previsão financeira</li>
-          <li class="disabled"><span class="lock">✕</span> Score de saúde</li>
-          <li class="disabled"><span class="lock">✕</span> Planejamento de metas</li>
+          <li><span class="check">✓</span> <span data-lang="pt">Lançamentos ilimitados</span><span data-lang="en">Unlimited entries</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Receitas e despesas</span><span data-lang="en">Income and expenses</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Parcelas com lembretes</span><span data-lang="en">Installments with reminders</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Tema claro e escuro</span><span data-lang="en">Light and dark theme</span></li>
+          <li><span class="check">✓</span> PT / EN</li>
+          <li class="disabled"><span class="lock">✕</span> <span data-lang="pt">Gráficos de desempenho</span><span data-lang="en">Performance charts</span></li>
+          <li class="disabled"><span class="lock">✕</span> <span data-lang="pt">Previsão financeira</span><span data-lang="en">Financial forecast</span></li>
+          <li class="disabled"><span class="lock">✕</span> <span data-lang="pt">Score de saúde</span><span data-lang="en">Health score</span></li>
+          <li class="disabled"><span class="lock">✕</span> <span data-lang="pt">Metas financeiras</span><span data-lang="en">Financial goals</span></li>
         </ul>
-        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-secondary">Baixar grátis</a>
+        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-secondary" data-lang="pt">Baixar grátis</a>
+        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-secondary" data-lang="en">Download free</a>
       </div>
 
       <!-- PRO ANUAL -->
       <div class="plan-card featured">
-        <div class="plan-badge">⭐ MELHOR OPÇÃO</div>
-        <div class="plan-name">PRO Anual</div>
-        <div class="plan-price"><sup>R$</sup>12,90</div>
-        <div class="plan-period">/mês</div>
-        <div class="plan-annual">R$ 154,80/ano · 35% off</div>
+        <div class="plan-badge" data-lang="pt">⭐ MELHOR OPÇÃO</div>
+        <div class="plan-badge" data-lang="en">⭐ BEST VALUE</div>
+        <div class="plan-name" data-lang="pt">PRO Anual</div>
+        <div class="plan-name" data-lang="en">PRO Annual</div>
+        <div class="plan-price" data-lang="pt"><sup>R$</sup>12,90</div>
+        <div class="plan-price" data-lang="en"><sup>$</sup>4,99</div>
+        <div class="plan-period" data-lang="pt">/mês</div>
+        <div class="plan-period" data-lang="en">/month</div>
+        <div class="plan-annual" data-lang="pt">R$ 154,80/ano · 35% off</div>
+        <div class="plan-annual" data-lang="en">$59.88/year · 35% off</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Lançamentos ilimitados</li>
-          <li><span class="check">✓</span> Receitas e despesas</li>
-          <li><span class="check">✓</span> Parcelamentos com lembretes</li>
-          <li><span class="check">✓</span> Tema claro e escuro</li>
-          <li><span class="check">✓</span> Bilíngue PT/EN</li>
-          <li><span class="check">✓</span> Gráficos de desempenho</li>
-          <li><span class="check">✓</span> Previsão financeira 3 meses</li>
-          <li><span class="check">✓</span> Score de saúde financeira</li>
-          <li><span class="check">✓</span> Planejamento de metas 50/30/20</li>
+          <li><span class="check">✓</span> <span data-lang="pt">Lançamentos ilimitados</span><span data-lang="en">Unlimited entries</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Receitas e despesas</span><span data-lang="en">Income and expenses</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Parcelas com lembretes</span><span data-lang="en">Installments with reminders</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Tema claro e escuro</span><span data-lang="en">Light and dark theme</span></li>
+          <li><span class="check">✓</span> PT / EN</li>
+          <li><span class="check">✓</span> <span data-lang="pt">Gráficos de desempenho</span><span data-lang="en">Performance charts</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Previsão financeira 3 meses</span><span data-lang="en">3-month financial forecast</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Score de saúde financeira</span><span data-lang="en">Financial health score</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Metas e regra 50/30/20</span><span data-lang="en">Goals and 50/30/20 rule</span></li>
         </ul>
-        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-primary">Começar 7 dias grátis</a>
+        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-primary" data-lang="pt">Começar 7 dias grátis</a>
+        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-primary" data-lang="en">Start 7-day free trial</a>
       </div>
 
       <!-- PRO MENSAL -->
       <div class="plan-card">
-        <div class="plan-name">PRO Mensal</div>
-        <div class="plan-price"><sup>R$</sup>19,90</div>
-        <div class="plan-period">/mês</div>
-        <div class="plan-annual">Cancele quando quiser</div>
+        <div class="plan-name" data-lang="pt">PRO Mensal</div>
+        <div class="plan-name" data-lang="en">PRO Monthly</div>
+        <div class="plan-price" data-lang="pt"><sup>R$</sup>19,90</div>
+        <div class="plan-price" data-lang="en"><sup>$</sup>7,99</div>
+        <div class="plan-period" data-lang="pt">/mês</div>
+        <div class="plan-period" data-lang="en">/month</div>
+        <div class="plan-annual" data-lang="pt">Cancele quando quiser</div>
+        <div class="plan-annual" data-lang="en">Cancel anytime</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Lançamentos ilimitados</li>
-          <li><span class="check">✓</span> Receitas e despesas</li>
-          <li><span class="check">✓</span> Parcelamentos com lembretes</li>
-          <li><span class="check">✓</span> Tema claro e escuro</li>
-          <li><span class="check">✓</span> Bilíngue PT/EN</li>
-          <li><span class="check">✓</span> Gráficos de desempenho</li>
-          <li><span class="check">✓</span> Previsão financeira 3 meses</li>
-          <li><span class="check">✓</span> Score de saúde financeira</li>
-          <li><span class="check">✓</span> Planejamento de metas 50/30/20</li>
+          <li><span class="check">✓</span> <span data-lang="pt">Lançamentos ilimitados</span><span data-lang="en">Unlimited entries</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Receitas e despesas</span><span data-lang="en">Income and expenses</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Parcelas com lembretes</span><span data-lang="en">Installments with reminders</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Tema claro e escuro</span><span data-lang="en">Light and dark theme</span></li>
+          <li><span class="check">✓</span> PT / EN</li>
+          <li><span class="check">✓</span> <span data-lang="pt">Gráficos de desempenho</span><span data-lang="en">Performance charts</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Previsão financeira 3 meses</span><span data-lang="en">3-month financial forecast</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Score de saúde financeira</span><span data-lang="en">Financial health score</span></li>
+          <li><span class="check">✓</span> <span data-lang="pt">Metas e regra 50/30/20</span><span data-lang="en">Goals and 50/30/20 rule</span></li>
         </ul>
-        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-secondary">Assinar mensal</a>
+        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-secondary" data-lang="pt">Assinar mensal</a>
+        <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-plan btn-plan-secondary" data-lang="en">Subscribe monthly</a>
       </div>
-
     </div>
   </div>
 </section>
 
 <!-- TRIAL BANNER -->
 <section class="trial-banner">
-  <h2>Baixe agora e comece a<br/>controlar seu dinheiro</h2>
-  <p>Disponível para Android. iOS em breve.</p>
+  <h2 data-lang="pt">Baixe agora e comece a<br/>controlar seu dinheiro</h2>
+  <h2 data-lang="en">Download now and start<br/>controlling your money</h2>
+  <p data-lang="pt">Disponível para Android. iOS em breve.</p>
+  <p data-lang="en">Available for Android. iOS coming soon.</p>
   <a href="https://play.google.com/store/apps/details?id=com.edicarlosmv.fintrack" class="btn-trial">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.85a2.03 2.03 0 0 1-.99-.86L13.5 12 2.19 1.01A2.03 2.03 0 0 1 3.18.15L16.34 7.5l-3.46 4.5 3.46 4.5L3.18 23.85z"/><path d="M16.9 14.5l2.54 1.46c.9.52.9 1.56 0 2.08l-3.1 1.79L13.5 16.5l3.4-2zM16.9 9.5L13.5 7.5l2.84-3.33 3.1 1.79c.9.52.9 1.56 0 2.08L16.9 9.5z"/></svg>
-    Baixar na Google Play
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5v-17c0-.83 1-.98 1.4-.42l13.5 8.5c.36.23.36.77 0 1L4.4 20.92C4 21.48 3 21.33 3 20.5z"/></svg>
+    <span data-lang="pt">Baixar na Google Play</span>
+    <span data-lang="en">Download on Google Play</span>
   </a>
-  <div class="trial-note">7 dias grátis · R$ 12,90/mês após o período · Cancele quando quiser</div>
+  <div class="trial-note" data-lang="pt">7 dias grátis · R$ 12,90/mês após o período · Cancele quando quiser</div>
+  <div class="trial-note" data-lang="en">7-day free trial · $4.99/mo after trial · Cancel anytime</div>
 </section>
 
 <!-- PRIVACY -->
 <section class="privacy-section" id="privacidade">
-  <h2>Política de Privacidade</h2>
-  <div class="privacy-date">Última atualização: julho de 2026</div>
+  <h2 data-lang="pt">Política de Privacidade</h2>
+  <h2 data-lang="en">Privacy Policy</h2>
+  <div class="privacy-date" data-lang="pt">Última atualização: julho de 2026</div>
+  <div class="privacy-date" data-lang="en">Last updated: July 2026</div>
 
-  <p>O <strong>FinTrack</strong> é um aplicativo de controle financeiro pessoal. Esta Política descreve como coletamos, usamos e protegemos suas informações.</p>
-
-  <h3>1. Dados coletados</h3>
-  <p>Coletamos apenas os dados que você mesmo insere:</p>
-  <ul>
-    <li>Lançamentos financeiros (descrição, valor, categoria, data)</li>
-    <li>Informações de parcelas (banco, dia de vencimento)</li>
-    <li>Metas financeiras (nome, valor alvo, prazo)</li>
-    <li>Preferência de idioma</li>
-  </ul>
-  <p style="margin-top:12px">Não coletamos nome, CPF, e-mail, localização, fotos, contatos ou dados pessoais identificáveis.</p>
-
-  <h3>2. Armazenamento</h3>
-  <div class="highlight-box">
-    Todos os dados ficam armazenados exclusivamente no seu dispositivo, usando o armazenamento local do Android (AsyncStorage). Nenhum dado é enviado para servidores externos.
+  <div data-lang="pt">
+    <p>O <strong>FinTrack</strong> é um aplicativo de controle financeiro pessoal. Esta Política descreve como coletamos, usamos e protegemos suas informações.</p>
+    <h3>1. Dados coletados</h3>
+    <p>Coletamos apenas os dados que você mesmo insere:</p>
+    <ul>
+      <li>Lançamentos financeiros (descrição, valor, categoria, data)</li>
+      <li>Informações de parcelas (banco, dia de vencimento)</li>
+      <li>Metas financeiras (nome, valor alvo, prazo)</li>
+      <li>Preferência de idioma</li>
+    </ul>
+    <p style="margin-top:12px">Não coletamos nome, CPF, e-mail, localização, fotos, contatos ou dados pessoais identificáveis.</p>
+    <h3>2. Armazenamento</h3>
+    <div class="highlight-box">Todos os dados ficam armazenados exclusivamente no seu dispositivo, usando o armazenamento local do Android (AsyncStorage). Nenhum dado é enviado para servidores externos.</div>
+    <h3>3. Compartilhamento</h3>
+    <p>O FinTrack <strong>não compartilha</strong> seus dados com terceiros, anunciantes ou qualquer outra entidade.</p>
+    <h3>4. Assinaturas e pagamentos</h3>
+    <p>Pagamentos são processados pelo Google Play e gerenciados pela plataforma RevenueCat. O FinTrack não tem acesso a dados de cartão ou informações bancárias.</p>
+    <h3>5. Exclusão de dados</h3>
+    <p>Desinstale o app para remover permanentemente todos os seus dados do dispositivo.</p>
+    <h3>6. Menores de idade</h3>
+    <p>O FinTrack não é direcionado a menores de 13 anos.</p>
+    <h3>7. Contato</h3>
+    <p>Dúvidas? <a href="mailto:edicarlos.mangabeira@gmail.com">edicarlos.mangabeira@gmail.com</a></p>
   </div>
 
-  <h3>3. Compartilhamento</h3>
-  <p>O FinTrack <strong>não compartilha</strong> seus dados com terceiros, anunciantes ou qualquer outra entidade.</p>
-
-  <h3>4. Assinaturas e pagamentos</h3>
-  <p>Pagamentos são processados pelo Google Play e gerenciados pela plataforma RevenueCat. O FinTrack não tem acesso a dados de cartão ou informações bancárias.</p>
-
-  <h3>5. Exclusão de dados</h3>
-  <p>Desinstale o app para remover permanentemente todos os seus dados do dispositivo.</p>
-
-  <h3>6. Menores de idade</h3>
-  <p>O FinTrack não é direcionado a menores de 13 anos.</p>
-
-  <h3>7. Contato</h3>
-  <p>Dúvidas? Entre em contato: <a href="mailto:edicarlos.mangabeira@gmail.com">edicarlos.mangabeira@gmail.com</a></p>
+  <div data-lang="en">
+    <p><strong>FinTrack</strong> is a personal finance app. This Policy describes how we collect, use and protect your information.</p>
+    <h3>1. Data collected</h3>
+    <p>We only collect data you enter yourself:</p>
+    <ul>
+      <li>Financial entries (description, amount, category, date)</li>
+      <li>Installment information (bank, due day)</li>
+      <li>Financial goals (name, target amount, deadline)</li>
+      <li>Language preference</li>
+    </ul>
+    <p style="margin-top:12px">We do not collect name, email, location, photos, contacts or personally identifiable data.</p>
+    <h3>2. Storage</h3>
+    <div class="highlight-box">All data is stored exclusively on your device using Android's local storage (AsyncStorage). No data is sent to external servers.</div>
+    <h3>3. Sharing</h3>
+    <p>FinTrack <strong>does not share</strong> your data with third parties, advertisers or any other entity.</p>
+    <h3>4. Subscriptions and payments</h3>
+    <p>Payments are processed by Google Play and managed by the RevenueCat platform. FinTrack has no access to card data or banking information.</p>
+    <h3>5. Data deletion</h3>
+    <p>Uninstall the app to permanently remove all your data from the device.</p>
+    <h3>6. Minors</h3>
+    <p>FinTrack is not directed at children under 13.</p>
+    <h3>7. Contact</h3>
+    <p>Questions? <a href="mailto:edicarlos.mangabeira@gmail.com">edicarlos.mangabeira@gmail.com</a></p>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -667,13 +490,24 @@
     <span class="footer-logo-text">FinTrack</span>
   </div>
   <div class="footer-links">
-    <a href="#features">Recursos</a>
-    <a href="#plans">Planos</a>
-    <a href="#privacidade">Privacidade</a>
-    <a href="mailto:edicarlos.mangabeira@gmail.com">Contato</a>
+    <a href="#features" data-lang="pt">Recursos</a><a href="#features" data-lang="en">Features</a>
+    <a href="#plans" data-lang="pt">Planos</a><a href="#plans" data-lang="en">Plans</a>
+    <a href="#privacidade" data-lang="pt">Privacidade</a><a href="#privacidade" data-lang="en">Privacy</a>
+    <a href="mailto:edicarlos.mangabeira@gmail.com">Email</a>
   </div>
-  <p>© 2026 FinTrack. Todos os direitos reservados.</p>
+  <p>© 2026 FinTrack. <span data-lang="pt">Todos os direitos reservados.</span><span data-lang="en">All rights reserved.</span></p>
 </footer>
 
+<script>
+  function setLang(lang) {
+    document.getElementById('html-root').lang = lang;
+    document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    localStorage.setItem('fintrack-lang', lang);
+  }
+  // Restaurar idioma salvo
+  const saved = localStorage.getItem('fintrack-lang');
+  if (saved === 'en') setLang('en');
+</script>
 </body>
 </html>
