@@ -60,9 +60,70 @@
     .screenshots-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 12px 24px 24px; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: center; flex-wrap: nowrap; }
     .screenshots-scroll::-webkit-scrollbar { display: none; }
     .screenshot-item { flex-shrink: 0; scroll-snap-align: center; text-align: center; }
-    .screenshot-item img { width: 200px; border-radius: 20px; box-shadow: 0 16px 48px rgba(0,0,0,0.18); display: block; transition: transform .3s; }
-    .screenshot-item img:hover { transform: translateY(-6px) scale(1.02); }
+    .screenshot-item img { width: 200px; border-radius: 20px; box-shadow: 0 16px 48px rgba(0,0,0,0.18); display: block; transition: transform .3s, box-shadow .3s; cursor: zoom-in; }
+    .screenshot-item img:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 24px 60px rgba(0,0,0,0.28); }
     .screenshot-label { font-size: 12px; color: var(--text-2); margin-top: 10px; font-weight: 500; }
+
+    /* LIGHTBOX */
+    .lightbox-overlay {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      padding: 24px;
+      animation: lb-fade-in .2s ease;
+    }
+    .lightbox-overlay.open { display: flex; }
+    @keyframes lb-fade-in { from { opacity: 0; } to { opacity: 1; } }
+    .lightbox-inner {
+      position: relative;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .lightbox-img {
+      max-height: 88vh; max-width: 340px; width: auto;
+      border-radius: 24px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      animation: lb-zoom-in .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes lb-zoom-in { from { transform: scale(0.82); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .lightbox-close {
+      position: absolute; top: -14px; right: -14px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--white); color: var(--text);
+      border: none; cursor: pointer;
+      font-size: 18px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: background .2s, transform .15s;
+      z-index: 1;
+    }
+    .lightbox-close:hover { background: #f3f3f3; transform: scale(1.1); }
+    .lightbox-nav {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.3);
+      color: var(--white); font-size: 20px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s; flex-shrink: 0;
+      user-select: none;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.28); }
+    .lightbox-caption {
+      position: absolute; bottom: -36px; left: 50%; transform: translateX(-50%);
+      font-size: 13px; color: rgba(255,255,255,0.7);
+      white-space: nowrap; font-weight: 500;
+    }
+    .lightbox-dots {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 8px;
+    }
+    .lightbox-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      transition: background .2s, transform .2s;
+      cursor: pointer;
+    }
+    .lightbox-dot.active { background: var(--white); transform: scale(1.3); }
 
     /* STATS */
     .stats-bar { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 24px; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
@@ -498,16 +559,108 @@
   <p>© 2026 FinTrack. <span data-lang="pt">Todos os direitos reservados.</span><span data-lang="en">All rights reserved.</span></p>
 </footer>
 
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="lbClickOutside(event)">
+  <button class="lightbox-nav" id="lb-prev" onclick="lbNav(-1)">&#8249;</button>
+  <div class="lightbox-inner">
+    <button class="lightbox-close" onclick="lbClose()">✕</button>
+    <img class="lightbox-img" id="lb-img" src="" alt="" />
+    <div class="lightbox-caption" id="lb-caption"></div>
+  </div>
+  <button class="lightbox-nav" id="lb-next" onclick="lbNav(1)">&#8250;</button>
+  <div class="lightbox-dots" id="lb-dots"></div>
+</div>
+
 <script>
+  // ── LANG TOGGLE ──────────────────────────────────
   function setLang(lang) {
     document.getElementById('html-root').lang = lang;
     document.getElementById('btn-pt').classList.toggle('active', lang === 'pt');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     localStorage.setItem('fintrack-lang', lang);
+    lbUpdateCaption();
   }
-  // Restaurar idioma salvo
   const saved = localStorage.getItem('fintrack-lang');
   if (saved === 'en') setLang('en');
+
+  // ── LIGHTBOX ─────────────────────────────────────
+  const screenshots = [
+    { src: 'fintrack-screenshot-1-inicio.png',    pt: 'Início',           en: 'Home' },
+    { src: 'fintrack-screenshot-2-lancamentos.png', pt: 'Lançamentos',    en: 'Entries' },
+    { src: 'fintrack-screenshot-3-desempenho.png',  pt: 'Desempenho',     en: 'Performance' },
+    { src: 'fintrack-screenshot-4-lembretes.png',   pt: 'Lembretes',      en: 'Reminders' },
+    { src: 'fintrack-screenshot-5-saude.png',       pt: 'Saúde Financeira', en: 'Financial Health' },
+  ];
+
+  let lbCurrent = 0;
+
+  // Adiciona onclick em cada imagem das screenshots
+  document.querySelectorAll('.screenshot-item img').forEach((img, i) => {
+    img.addEventListener('click', () => lbOpen(i));
+  });
+
+  // Gera os dots
+  const dotsEl = document.getElementById('lb-dots');
+  screenshots.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'lightbox-dot' + (i === 0 ? ' active' : '');
+    d.onclick = (e) => { e.stopPropagation(); lbGoTo(i); };
+    dotsEl.appendChild(d);
+  });
+
+  function lbOpen(index) {
+    lbCurrent = index;
+    lbRender();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function lbClose() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function lbNav(dir) {
+    lbGoTo((lbCurrent + dir + screenshots.length) % screenshots.length);
+  }
+
+  function lbGoTo(index) {
+    lbCurrent = index;
+    lbRender();
+  }
+
+  function lbRender() {
+    const s = screenshots[lbCurrent];
+    const img = document.getElementById('lb-img');
+    img.style.animation = 'none';
+    img.offsetHeight; // reflow para reiniciar animação
+    img.style.animation = '';
+    img.src = s.src;
+    lbUpdateCaption();
+    // Atualiza dots
+    document.querySelectorAll('.lightbox-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === lbCurrent);
+    });
+  }
+
+  function lbUpdateCaption() {
+    const s = screenshots[lbCurrent];
+    if (!s) return;
+    const lang = document.getElementById('html-root').lang || 'pt';
+    document.getElementById('lb-caption').textContent = lang === 'en' ? s.en : s.pt;
+  }
+
+  function lbClickOutside(e) {
+    if (e.target === document.getElementById('lightbox')) lbClose();
+  }
+
+  // Navegação por teclado
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'ArrowLeft') lbNav(-1);
+    if (e.key === 'Escape') lbClose();
+  });
 </script>
 </body>
 </html>
