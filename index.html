@@ -57,12 +57,12 @@
     /* SCREENSHOTS */
     .screenshots-section { padding: 60px 24px; background: linear-gradient(180deg, #f0fdf8 0%, var(--white) 100%); overflow: hidden; }
     .screenshots-title { text-align: center; font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px, 3vw, 32px); font-weight: 700; margin-bottom: 40px; color: var(--text); }
-    .screenshots-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 12px 24px 24px; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: center; flex-wrap: nowrap; }
+    .screenshots-scroll { display: flex; gap: 24px; overflow-x: auto; padding: 20px 40px 32px; scrollbar-width: none; scroll-snap-type: x mandatory; justify-content: center; flex-wrap: nowrap; }
     .screenshots-scroll::-webkit-scrollbar { display: none; }
     .screenshot-item { flex-shrink: 0; scroll-snap-align: center; text-align: center; }
-    .screenshot-item img { width: 200px; border-radius: 20px; box-shadow: 0 16px 48px rgba(0,0,0,0.18); display: block; transition: transform .3s, box-shadow .3s; cursor: zoom-in; }
-    .screenshot-item img:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 24px 60px rgba(0,0,0,0.28); }
-    .screenshot-label { font-size: 12px; color: var(--text-2); margin-top: 10px; font-weight: 500; }
+    .screenshot-item img { width: 260px; border-radius: 24px; box-shadow: 0 20px 56px rgba(0,0,0,0.22); display: block; transition: transform .3s, box-shadow .3s; cursor: zoom-in; }
+    .screenshot-item img:hover { transform: translateY(-8px) scale(1.04); box-shadow: 0 32px 72px rgba(0,0,0,0.32); }
+    .screenshot-label { font-size: 13px; color: var(--text-2); margin-top: 12px; font-weight: 600; }
 
     /* LIGHTBOX */
     .lightbox-overlay {
@@ -80,8 +80,8 @@
       display: flex; align-items: center; gap: 16px;
     }
     .lightbox-img {
-      max-height: 88vh; max-width: 340px; width: auto;
-      border-radius: 24px;
+      max-height: 90vh; max-width: 420px; width: auto;
+      border-radius: 28px;
       box-shadow: 0 32px 80px rgba(0,0,0,0.5);
       animation: lb-zoom-in .25s cubic-bezier(.34,1.56,.64,1);
     }
@@ -205,7 +205,7 @@
       .stats-bar { gap: 28px; }
       .hero-actions { flex-direction: column; align-items: center; }
       .btn-primary, .btn-outline { width: 100%; max-width: 320px; justify-content: center; }
-      .screenshot-item img { width: 160px; }
+      .screenshot-item img { width: 200px; }
     }
   </style>
 </head>
